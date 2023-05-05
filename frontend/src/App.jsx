@@ -21,8 +21,7 @@ function App() {
 		<Box
 			backgroundImage={'url(./images/background.jpg)'}
 			objectFit={'cover'}
-			height={'100vh'}
-			width={'100vw'}
+			minHeight={'100vh'}
 		>
 			<RouterProvider router={router} />
 		</Box>

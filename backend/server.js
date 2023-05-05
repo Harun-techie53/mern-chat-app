@@ -15,8 +15,8 @@ connectDB();
 const server = http.createServer(app);
 const io = require('socket.io')(server, {
 	cors: {
-		origin: '*'
-	}
+		origin: '*',
+	},
 });
 
 io.on('connection', (socket) => {
