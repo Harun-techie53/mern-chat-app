@@ -3,13 +3,13 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 
-const genCryptoHash = require('../utils/genCryptoHash');
+const { genCryptoHash } = require('../utils');
 
 const userSchema = mongoose.Schema({
 	name: {
 		type: String,
 		required: [true, 'Name is required'],
-    unique: true
+		unique: true,
 	},
 	email: {
 		type: String,
@@ -38,6 +38,11 @@ const userSchema = mongoose.Schema({
 		default:
 			'https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg',
 	},
+	role: {
+		type: String,
+		enum: ['user', 'admin'],
+		default: 'user',
+	},
 	joined_At: {
 		type: Date,
 		default: Date.now(),
@@ -65,9 +70,9 @@ userSchema.methods.matchPassword = async function matchPassword(
 	return isMatch;
 };
 
-// userSchema.pre(/^find/, function(next) {
-//     this.select('-password');
-//     next();
-// })
+// userSchema.pre(/^findById/, function (next) {
+// 	this.select('-password -__v');
+// 	next();
+// });
 
 module.exports = User = new mongoose.model('User', userSchema);

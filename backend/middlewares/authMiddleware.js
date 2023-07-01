@@ -1,37 +1,51 @@
 const jwt = require('jsonwebtoken');
-const promisify = require('util');
+const { promisify } = require('util');
 const AppError = require('../utils/appError');
-const catchAsync = require('../utils/catchAsync');
+const { catchAsync } = require('../utils');
 const User = require('../models/userModel');
 
 exports.protectRoute = catchAsync(async (req, res, next) => {
-    let token;
+	let token;
 
-    // Check to see whether token available or not
-    if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-        token = req.headers.authorization.split(' ')[1];
-    }
-    
-    if(!token) {
-        return next(new AppError('No token, authorization denied!', 401));
-    }
-    // Verification the token
-    let decoded;
+	// Check to see whether token available or not
+	if (
+		req.headers.authorization &&
+		req.headers.authorization.startsWith('Bearer')
+	) {
+		token = req.headers.authorization.split(' ')[1];
+	}
 
-    decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+	if (!token) {
+		return next(new AppError('No token, authorization denied!', 401));
+	}
+	// Verification the token
+	let decoded;
 
-    if(!decoded) {
-        return next(new AppError('Token is not valid, authorization denied!', 401));
-    }
+	decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
-    const freshUser = await User.findById(decoded.id);
+	if (!decoded) {
+		return next(new AppError('Token is not valid, authorization denied!', 401));
+	}
 
-    // If the user does not exist after the token is issued
-    if(!freshUser) {
-        return next(new AppError('The user belonging this token does not exist anymore!', 404));
-    }
+	const freshUser = await User.findById(decoded.id);
 
-    req.user = freshUser;
+	// If the user does not exist after the token is issued
+	if (!freshUser) {
+		return next(
+			new AppError('The user belonging this token does not exist anymore!', 404)
+		);
+	}
 
-    next();
+	req.user = freshUser;
+
+	next();
 });
+
+exports.restrictTo =
+	([...roles]) =>
+	(req, res, next) => {
+		if (!roles.includes(req.user.role))
+			next(new AppError('Route is forbidden!', 403));
+
+		next();
+	};

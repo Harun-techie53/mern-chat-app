@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
 	Stack,
 	Text,
@@ -8,46 +8,114 @@ import {
 	InputGroup,
 	FormControl,
 	FormLabel,
+	useToast,
 } from '@chakra-ui/react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const SignInForm = () => {
+	const navigate = useNavigate();
+	const toast = useToast();
+	const [inputFields, setInputFields] = useState({
+		email: '',
+		password: '',
+	});
 	const [show, setShow] = React.useState(false);
 	const handleClick = () => setShow(!show);
 	const [input, setInput] = React.useState('');
 
-	const handleInputChange = (e) => setInput(e.target.value);
+	const handleInputChange = (e) => {
+		setInputFields({
+			...inputFields,
+			[e.target.name]: e.target.value,
+		});
+	};
+
+	const handleFormSubmit = async (e) => {
+		e.preventDefault();
+
+		try {
+			const { data } = await axios.post(
+				'http://localhost:8000/v1/user/signIn',
+				JSON.stringify(inputFields),
+				{
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				}
+			);
+
+			console.log(data);
+
+			if (data.status === 'success') {
+				setInputFields({
+					...inputFields,
+					email: '',
+					password: '',
+				});
+
+				toast({
+					title: 'Logged In Successfully',
+					status: 'success',
+					duration: 5000,
+					isClosable: true,
+				});
+
+				setTimeout(() => {
+					navigate('/chat');
+				}, 6000);
+			}
+		} catch (error) {
+			console.error(error);
+			toast({
+				title: 'Error Occured!',
+				description: error.message,
+				status: 'error',
+				duration: 5000,
+				isClosable: true,
+			});
+		}
+	};
 
 	const isError = input === '';
 	return (
-		<Stack spacing={5}>
-			<FormControl isRequired>
-				<FormLabel>Email Address</FormLabel>
-				<Input
-					value={input}
-					onChange={handleInputChange}
-					placeholder="Enter Email"
-					variant={'outline'}
-				/>
-			</FormControl>
-			<FormControl isRequired>
-				<FormLabel>Password</FormLabel>
-				<InputGroup size="md">
+		<form onSubmit={handleFormSubmit}>
+			<Stack spacing={5}>
+				<FormControl isRequired>
+					<FormLabel>Email Address</FormLabel>
 					<Input
-						pr="4.5rem"
-						type={show ? 'text' : 'password'}
-						placeholder="Enter Password"
+						name="email"
+						value={inputFields.email}
+						onChange={handleInputChange}
+						placeholder="Enter Email"
 						variant={'outline'}
 					/>
-					<InputRightElement width="4.5rem">
-						<Button h="1.75rem" size="sm" onClick={handleClick}>
-							{show ? 'Hide' : 'Show'}
-						</Button>
-					</InputRightElement>
-				</InputGroup>
-			</FormControl>
-			<Button colorScheme="blue">Sign In</Button>
-			<Button colorScheme="red">Get Guest User Credential</Button>
-		</Stack>
+				</FormControl>
+				<FormControl isRequired>
+					<FormLabel>Password</FormLabel>
+					<InputGroup size="md">
+						<Input
+							name="password"
+							pr="4.5rem"
+							type={show ? 'text' : 'password'}
+							placeholder="Enter Password"
+							variant={'outline'}
+							value={inputFields.password}
+							onChange={handleInputChange}
+						/>
+						<InputRightElement width="4.5rem">
+							<Button h="1.75rem" size="sm" onClick={handleClick}>
+								{show ? 'Hide' : 'Show'}
+							</Button>
+						</InputRightElement>
+					</InputGroup>
+				</FormControl>
+				<Button colorScheme="blue" type="submit">
+					Sign In
+				</Button>
+				<Button colorScheme="red">Get Guest User Credential</Button>
+			</Stack>
+		</form>
 	);
 };
 

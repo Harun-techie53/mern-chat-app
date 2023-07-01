@@ -1,8 +1,8 @@
-const catchAsync = require('../utils/catchAsync');
 const User = require('../models/userModel');
 const jwt = require('jsonwebtoken');
 const AppError = require('../utils/appError');
-const genCryptoHash = require('../utils/genCryptoHash');
+const { genCryptoHash } = require('../utils');
+const { catchAsync } = require('../utils');
 
 const getJwtToken = (id) => {
 	return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -36,7 +36,7 @@ const createSendToken = (user, res) => {
 };
 
 exports.signUpUser = catchAsync(async (req, res, next) => {
-	const { name, email, password, passwordConfirm, photo } = req.body;
+	const { name, email, password, passwordConfirm, photo, role } = req.body;
 
 	const user = new User({
 		name,
@@ -44,6 +44,7 @@ exports.signUpUser = catchAsync(async (req, res, next) => {
 		password,
 		passwordConfirm,
 		photo,
+		role,
 	});
 
 	await user.save();
