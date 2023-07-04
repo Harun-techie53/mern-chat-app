@@ -1,9 +1,20 @@
 import { Container, Box, Button } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import TitleHeader from '../../components/Authentication/TitleHeader';
 import ButtonTabs from '../../components/Authentication/ButtonTabs';
+import { useChatState } from '../../context/ChatProvider';
+import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
+	const navigate = useNavigate();
+	const { userDetails } = useChatState();
+
+	useEffect(() => {
+		if (userDetails) {
+			navigate('/chat');
+		}
+	}, [userDetails]);
+
 	return (
 		<Container paddingY={'10'}>
 			<TitleHeader />

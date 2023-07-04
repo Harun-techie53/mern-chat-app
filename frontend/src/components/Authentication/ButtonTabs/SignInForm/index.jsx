@@ -12,6 +12,7 @@ import {
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { globalConstants } from '../../../../constants';
 
 const SignInForm = () => {
 	const navigate = useNavigate();
@@ -20,9 +21,11 @@ const SignInForm = () => {
 		email: '',
 		password: '',
 	});
-	const [show, setShow] = React.useState(false);
+	const [show, setShow] = useState(false);
 	const handleClick = () => setShow(!show);
-	const [input, setInput] = React.useState('');
+	const [input, setInput] = useState('');
+	const [isGuestCredentialsEnable, setIsGuestCredentialsEnable] =
+		useState(false);
 
 	const handleInputChange = (e) => {
 		setInputFields({
@@ -45,9 +48,8 @@ const SignInForm = () => {
 				}
 			);
 
-			console.log(data);
-
 			if (data.status === 'success') {
+				localStorage.setItem('user', JSON.stringify(data));
 				setInputFields({
 					...inputFields,
 					email: '',
@@ -66,7 +68,7 @@ const SignInForm = () => {
 				}, 6000);
 			}
 		} catch (error) {
-			console.error(error);
+			localStorage.removeItem('user');
 			toast({
 				title: 'Error Occured!',
 				description: error.message,
@@ -77,7 +79,13 @@ const SignInForm = () => {
 		}
 	};
 
-	const isError = input === '';
+	const handleGuestUserCredentials = () => {
+		setInputFields({
+			...inputFields,
+			email: globalConstants.GUEST_USER_EMAIL,
+			password: globalConstants.GUEST_USER_PASSWORD,
+		});
+	};
 	return (
 		<form onSubmit={handleFormSubmit}>
 			<Stack spacing={5}>
@@ -113,7 +121,9 @@ const SignInForm = () => {
 				<Button colorScheme="blue" type="submit">
 					Sign In
 				</Button>
-				<Button colorScheme="red">Get Guest User Credential</Button>
+				<Button colorScheme="red" onClick={handleGuestUserCredentials}>
+					Get Guest User Credential
+				</Button>
 			</Stack>
 		</form>
 	);

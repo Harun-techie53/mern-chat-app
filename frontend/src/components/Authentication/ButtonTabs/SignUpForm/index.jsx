@@ -134,6 +134,7 @@ const SignUpForm = () => {
 					);
 					setIsLoading(false);
 					if (res.status === 200) {
+						localStorage.setItem('user', JSON.stringify(res.data));
 						toast({
 							title: 'Registration Completed Successfully!',
 							description: 'Registration Completed Successfully.',
@@ -169,6 +170,7 @@ const SignUpForm = () => {
 				setIsLoading(false);
 
 				if (res.status === 200) {
+					localStorage.setItem('user', JSON.stringify(res.data));
 					toast({
 						title: 'Registration Completed Successfully!',
 						description: 'Registration Completed Successfully.',
@@ -184,6 +186,7 @@ const SignUpForm = () => {
 				}
 			} catch (error) {
 				setIsLoading(false);
+				localStorage.removeItem('user');
 				toast({
 					title: 'Error Occured!',
 					description: error.message,
