@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const messageSchema = mongoose.Schema({
-	sender: { type: Schema.Types.ObjectId, ref: 'userModel' },
-	chat: { type: Schema.Types.ObjectId, ref: 'userModel' },
+	sender: { type: mongoose.Schema.Types.ObjectId, ref: 'userModel' },
+	chat: { type: mongoose.Schema.Types.ObjectId, ref: 'Chat' },
 	text: {
 		type: String,
 		required: [true, 'Message text is required!'],
@@ -17,4 +17,4 @@ const messageSchema = mongoose.Schema({
 	},
 });
 
-module.exports = GroupMessage = new mongoose.model('Message', messageSchema);
+module.exports = Message = new mongoose.model('Message', messageSchema);

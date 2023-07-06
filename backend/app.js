@@ -14,6 +14,7 @@ app.use(express.json());
 
 app.use('/v1/user', require('./routes/userRoute'));
 app.use('/v1/chat', require('./routes/chatRoute'));
+app.use('/v1/message', require('./routes/messageRoute'));
 
 //Undefined Routes Handler
 app.all('*', (req, res, next) => {
