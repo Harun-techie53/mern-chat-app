@@ -4,13 +4,15 @@ import TitleHeader from '../../components/Authentication/TitleHeader';
 import ButtonTabs from '../../components/Authentication/ButtonTabs';
 import { useChatState } from '../../context/ChatProvider';
 import { useNavigate } from 'react-router-dom';
+import { utility } from '../../helpers/utility';
 
 const HomePage = () => {
 	const navigate = useNavigate();
 	const { userDetails } = useChatState();
 
 	useEffect(() => {
-		if (userDetails) {
+		console.log('userDetails', userDetails);
+		if (userDetails && utility.getAuthUser()) {
 			navigate('/chat');
 		}
 	}, [userDetails]);

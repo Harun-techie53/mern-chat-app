@@ -4,20 +4,14 @@ const AppError = require('../utils/appError');
 const { catchAsync } = require('../utils');
 
 exports.getAllUsers = catchAsync(async (req, res) => {
-	const queryKeyword = req.query;
-
-	const requestedQuery =
-		queryKeyword.name || queryKeyword.email
-			? {
-					$or: [
-						{ name: { $regex: queryKeyword.name ?? '', $options: 'i' } },
-						{ email: { $regex: queryKeyword.email ?? '', $options: 'i' } },
-					],
-			  }
-			: {};
+	// const requestedQuery = {
+	// 	$or: [
+	// 		{ name: { $regex: queryKeyword.name ?? '', $options: 'i' } },
+	// 		{ email: { $regex: queryKeyword.email ?? '', $options: 'i' } },
+	// 	],
+	// };
 
 	const users = await userModel
-		.find(requestedQuery)
 		.find({ _id: { $ne: req.user._id } })
 		.select('-password -__v');
 	res.status(200).json({

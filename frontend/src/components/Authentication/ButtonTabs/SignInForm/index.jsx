@@ -13,10 +13,12 @@ import {
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { globalConstants } from '../../../../constants';
+import { useChatState } from '../../../../context/ChatProvider';
 
 const SignInForm = () => {
 	const navigate = useNavigate();
 	const toast = useToast();
+	const { setUserDetails } = useChatState();
 	const [inputFields, setInputFields] = useState({
 		email: '',
 		password: '',
@@ -50,6 +52,7 @@ const SignInForm = () => {
 
 			if (data.status === 'success') {
 				localStorage.setItem('user', JSON.stringify(data));
+				setUserDetails({ authToken: data.token, user: data.data.user });
 				setInputFields({
 					...inputFields,
 					email: '',

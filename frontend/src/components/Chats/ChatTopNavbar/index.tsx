@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
 	Avatar,
 	Box,
@@ -12,8 +12,18 @@ import {
 	WrapItem,
 } from '@chakra-ui/react';
 import { BellIcon, ChevronDownIcon, SearchIcon } from '@chakra-ui/icons';
+import { useNavigate } from 'react-router-dom';
+import { useChatState } from '../../../context/ChatProvider';
 
 const ChatTopNavbar = ({ sideDrawerRef, onOpen }) => {
+	const navigate = useNavigate();
+	const { userDetails, setUserDetails } = useChatState();
+	const user = useMemo(() => userDetails?.user, [userDetails]);
+	const handleLogOut = () => {
+		localStorage.removeItem('user');
+		setUserDetails(null);
+		navigate('/');
+	};
 	return (
 		<Box
 			w={'100%'}
@@ -38,16 +48,12 @@ const ChatTopNavbar = ({ sideDrawerRef, onOpen }) => {
 				<Box marginLeft={'1rem'}>
 					<Menu>
 						<MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-							<Avatar
-								size={'sm'}
-								name="Dan Abrahmov"
-								src="https://bit.ly/dan-abramov"
-							/>
+							<Avatar size={'sm'} name={user?.name} src={user?.photo} />
 						</MenuButton>
 						<MenuList w={'10%'}>
 							<MenuItem>Profile</MenuItem>
 							<MenuItem>Settings</MenuItem>
-							<MenuItem>Log Out</MenuItem>
+							<MenuItem onClick={handleLogOut}>Log Out</MenuItem>
 						</MenuList>
 					</Menu>
 				</Box>

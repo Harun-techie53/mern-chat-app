@@ -1,12 +1,14 @@
 import { useContext, useEffect } from 'react';
 import { useState } from 'react';
 import { createContext } from 'react';
+import { utility } from '../helpers/utility';
 
 const ChatContext = createContext();
 
 const ChatProvider = ({ children }) => {
+	const [selectedUser, setSelectedUser] = useState(null);
 	const [userDetails, setUserDetails] = useState(null);
-	const userData = JSON.parse(localStorage.getItem('user') ?? {});
+	const userData = utility.getAuthUser();
 
 	useEffect(() => {
 		if (userData) {
@@ -19,7 +21,9 @@ const ChatProvider = ({ children }) => {
 
 	return (
 		<>
-			<ChatContext.Provider value={{ userDetails }}>
+			<ChatContext.Provider
+				value={{ userDetails, setUserDetails, selectedUser, setSelectedUser }}
+			>
 				{children}
 			</ChatContext.Provider>
 		</>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Button, Text, VStack } from '@chakra-ui/react';
 
-const ChatPreview = () => {
+const GroupChatPreview = ({ groupChat }) => {
 	return (
 		<Box
 			padding={'0.7rem'}
@@ -11,7 +11,7 @@ const ChatPreview = () => {
 			_hover={{ bg: 'gray.300' }}
 		>
 			<Text _hover={{ fontWeight: 'bold' }} fontSize={'lg'}>
-				Guest User
+				{groupChat.name}
 			</Text>
 			<Box display={'flex'} alignItems={'center'} fontSize={'sm'}>
 				<Text fontWeight={'bold'} marginRight={'0.3rem'}>
@@ -23,4 +23,4 @@ const ChatPreview = () => {
 	);
 };
 
-export default ChatPreview;
+export default GroupChatPreview;

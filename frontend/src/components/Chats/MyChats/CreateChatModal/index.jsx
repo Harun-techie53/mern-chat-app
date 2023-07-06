@@ -1,5 +1,7 @@
 import {
 	Button,
+	FormControl,
+	Input,
 	Modal,
 	ModalBody,
 	ModalCloseButton,
@@ -12,20 +14,24 @@ import {
 function CreateChatModal({ isOpen, onClose }) {
 	return (
 		<>
-			<Modal isOpen={isOpen} onClose={onClose}>
+			<Modal aria isOpen={isOpen} onClose={onClose}>
 				<ModalOverlay />
 				<ModalContent>
-					<ModalHeader>Modal Title</ModalHeader>
+					<ModalHeader>Create Group Chat</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody>
-						<p>Hello World</p>
+						<FormControl>
+							<Input placeholder="Chat Name" />
+						</FormControl>
 					</ModalBody>
 
 					<ModalFooter>
 						<Button colorScheme="blue" mr={3} onClick={onClose}>
 							Close
 						</Button>
-						<Button variant="ghost">Secondary Action</Button>
+						<Button variant="solid" colorScheme="whatsapp">
+							Create
+						</Button>
 					</ModalFooter>
 				</ModalContent>
 			</Modal>

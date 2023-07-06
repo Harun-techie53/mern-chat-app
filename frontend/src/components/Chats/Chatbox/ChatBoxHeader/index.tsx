@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 
-const ChatBoxHeader = () => {
+const ChatBoxHeader = ({ user }) => {
 	return (
 		<Box
 			bg={'gray.100'}
@@ -24,11 +24,11 @@ const ChatBoxHeader = () => {
 			<Box display={'flex'} alignItems={'center'}>
 				<Avatar
 					size={'sm'}
-					name="Dan Abrahmov"
-					src="https://bit.ly/dan-abramov"
+					name={user.name}
+					src={user.photo}
 					marginRight={'0.7rem'}
 				/>
-				<Text fontSize={'lg'}>Harunur Rashid</Text>
+				<Text fontSize={'lg'}>{user.name}</Text>
 			</Box>
 			<Menu>
 				<MenuButton as={IconButton}>

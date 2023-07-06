@@ -7,6 +7,7 @@ import { Box, useDisclosure } from '@chakra-ui/react';
 import SideDrawer from '../../components/Chats/SideDrawer';
 import MyChats from '../../components/Chats/MyChats';
 import Chatbox from '../../components/Chats/Chatbox';
+import { utility } from '../../helpers/utility';
 
 const ChatPage = () => {
 	const navigate = useNavigate();
@@ -15,7 +16,7 @@ const ChatPage = () => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	useEffect(() => {
-		if (!userDetails) navigate('/');
+		if (!userDetails && !utility.getAuthUser()) navigate('/');
 	}, [userDetails]);
 
 	return (

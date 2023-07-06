@@ -13,6 +13,7 @@ app.use(
 app.use(express.json());
 
 app.use('/v1/user', require('./routes/userRoute'));
+app.use('/v1/chat', require('./routes/chatRoute'));
 
 //Undefined Routes Handler
 app.all('*', (req, res, next) => {
