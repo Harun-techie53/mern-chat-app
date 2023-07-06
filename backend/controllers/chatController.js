@@ -3,6 +3,7 @@ const Chat = require('../models/Chat');
 const AppError = require('../utils/appError');
 const utils = require('../utils');
 const userModel = require('../models/userModel');
+const Message = require('../models/Message');
 
 exports.getAllChats = catchAsync(async (req, res) => {
 	const queryKeyword = req.query;
@@ -104,5 +105,26 @@ exports.removeUserFromChat = catchAsync(async (req, res, next) => {
 		data: {
 			chat,
 		},
+	});
+});
+
+exports.deleteChat = catchAsync(async (req, res, next) => {
+	const chat = await Chat.findById(req.params.chatId);
+
+	if (!chat) next(new AppError('Chat Not Found!', 404));
+
+	if (chat.admin.toString() !== req.user._id.toString())
+		next(new AppError('Credentials Denied!', 401));
+
+	// console.log('chatMessages', chatMessages);
+
+	if (chat.messages.length !== 0) {
+		await Message.deleteMany({ chat: req.params.chatId });
+	}
+
+	await Chat.findByIdAndRemove(req.params.chatId);
+
+	res.status(204).json({
+		status: 'success',
 	});
 });

@@ -8,7 +8,10 @@ router
 	.get(protectRoute, chatController.getAllChats)
 	.post(protectRoute, chatController.createChat);
 
-router.route('/:chatId').patch(protectRoute, chatController.updateChat);
+router
+	.route('/:chatId')
+	.patch(protectRoute, chatController.updateChat)
+	.delete(protectRoute, chatController.deleteChat);
 
 router
 	.route('/:chatId/user/:userId')
