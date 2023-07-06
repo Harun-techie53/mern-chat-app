@@ -14,6 +14,18 @@ class Utils {
 		next();
 	};
 
+	findCommonElements = (arr1, arr2) => {
+		return arr1?.some((item) => arr2.includes(item));
+	};
+
+	findInArray = ({ array, itemToFind, key = '' }) => {
+		return array.findIndex((item) =>
+			key.trim()
+				? item[key].toString() === itemToFind.toString()
+				: item.toString() === itemToFind.toString()
+		);
+	};
+
 	genCryptoHash = (token) => {
 		return crypto.createHash('sha256').update(token).digest('hex');
 	};

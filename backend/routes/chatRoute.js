@@ -4,8 +4,14 @@ const chatController = require('../controllers/chatController');
 const router = express.Router();
 
 router
-	.route('/group-chat')
-	.get(protectRoute, chatController.getAllGroupChats)
-	.post(protectRoute, chatController.createGroupChat);
+	.route('/')
+	.get(protectRoute, chatController.getAllChats)
+	.post(protectRoute, chatController.createChat);
+
+router.route('/:chatId').patch(protectRoute, chatController.updateChat);
+
+router
+	.route('/:chatId/user/:userId')
+	.patch(protectRoute, chatController.removeUserFromChat);
 
 module.exports = router;

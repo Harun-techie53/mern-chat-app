@@ -10,9 +10,17 @@ const groupChatSchema = mongoose.Schema({
 	users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'userModel' }],
 	admin: { type: mongoose.Schema.Types.ObjectId, ref: 'userModel' },
 	messages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'GroupMessage' }],
+	isGroupChat: {
+		type: Boolean,
+		default: false,
+	},
 	createdAt: {
 		type: Date,
 		default: Date.now(),
+	},
+	lastUpdatedAt: {
+		type: Date,
+		default: null,
 	},
 });
 
